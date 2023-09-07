@@ -1,11 +1,12 @@
 <?php
 
-class digXML{
+
+
+class digXML {
 
 
 
-
-   private function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
+    private function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
     {
 
     $nameFiles=[];
@@ -26,8 +27,6 @@ class digXML{
                 
                 die('impossible d\'ouvrir le dossier '.$pathname);
             }
-
-
         }
 
     
@@ -50,7 +49,9 @@ class digXML{
 
 }
 
-    private function digXML(string $src, string $dest)
+    // fonction qui va extraire le xml d'un odt et l'ecrire dans un nouveau dossier
+
+    private function digXML(string $src, string $dest):bool
     {
             
         if(is_dir($dest)){
@@ -60,80 +61,118 @@ class digXML{
 
             foreach($listeNom as $nom){
 
-                echo $nom.'<br>';
                 $zip = new ZipArchive();
                 $zip->open($src.'/'.$nom);
-                var_dump($zip);
                 $zip->extractTo($dest);
                 $zip->close();
                 $newName=basename($nom,'.odt').'.xml';
                 rename($dest.'/content.xml', $dest.'/'.$newName);
                 chmod('tuneXml/'.$newName,777);
             }
-            
-
-            
+         
         }
-        
-        
-
-        
     }
 
 
-    private function readXML(string $fileName){
-
+    private static function readXML(string $fileName):array|bool
+    {
+        
         if(file_exists("tuneXml/".$fileName)){
 
             $content=[];
             $row=[];
             $handle=new XMLReader();
-            $handle->open('tuneXml/'.$fileName);
-            while($handle->read()){
+
+            if($handle->open('tuneXml/'.$fileName)){
+
+                while($handle->read()){
                     $row['name']=$handle->name;
                     $row['value']=$handle->value;
-
                     array_push($content,$row);
                 }
-
+            }
+            
             return $content;
         }
 
         else{
 
-            die('le fichier n\exitse pas.');
+            return FALSE;
         }
         
     }
 
-public function getInfoTune($fileName) :array
-{
-   
-    $info=[];
-    $content=$this->readXML($fileName);
-    $flag=0;
-    foreach($content as $row){
+    //méthode appelé dans l'index 
 
+    public static function getInfoTune($fileName) :array
+    {
+    
+        $info=[];
         
-        if($row['name']=='#text' && $flag==0){
+        $flag=0;
 
+        if($content=self::readXML($fileName)){
+
+            foreach($content as $row){
+
+                if($row['name']=='#text'){
+    
+                    $flag ++;
+    
+                    if($flag==2){
+    
+                        $info['auteur']=$row["value"];
+                        break;
+                    }                
+                }
+            }
+    
             $position = strpos($fileName,'.');
-      
-     
-      
             $info['titre']=substr($fileName, 0, $position);
-            $flag ++;
-        }        
-        else if($row['name']=='#text' && $flag==1){
-            $info['auteur']=$row["value"];
-            $flag ++;
-            break;
         }
-            
         
-     }
- 
-     return $info;
+        return $info;
+
+    }    
+
+
+    
 }
 
+
+
+// le singleton pour la connection à la base de données
+
+class ConnexionDb extends PDO{
+
+    //les constantes de connexion
+
+
+    private const DBHOST = 'localhost';
+    private const DBNAME ='inukshuk';
+    private const DBUSER='nanook';
+    private const DBPASS='ours';
+    private static $instance=null;
+
+
+    private function __construct(){
+
+        $dns='mysql:dbhost='.self::DBHOST.';dbname='.self::DBNAME;
+        parent::__construct($dns,self::DBUSER,self::DBPASS);
+
+    }
+
+    public static function getInstance(){
+
+        if(self::$instance==null){
+            return new self();
+        }
+
+        else{
+
+            return self::instance;
+        }
+    }
+
 }
+

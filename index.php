@@ -2,6 +2,7 @@
 
 require('digXML.php');
 
-$xml=new digXML();
-$res=$xml->getInfoTune('Between the bars.xml');
+
+$res=digXML::getInfoTune('Little Boxes.xml');
 echo $res['titre'].' de '.$res["auteur"] ;
+ConnexionDB::getInstance();
