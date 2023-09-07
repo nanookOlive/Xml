@@ -6,7 +6,7 @@ class digXML {
 
 
 
-    private function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
+    private static function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
     {
 
     $nameFiles=[];
@@ -51,13 +51,13 @@ class digXML {
 
     // fonction qui va extraire le xml d'un odt et l'ecrire dans un nouveau dossier
 
-    private function digXML(string $src, string $dest):bool
+    private static function digXML(string $src, string $dest):bool
     {
             
         if(is_dir($dest)){
 
 
-            $listeNom=openFolder($src);
+            $listeNom=self::openFolder($src);
 
             foreach($listeNom as $nom){
 
@@ -74,7 +74,7 @@ class digXML {
     }
 
 
-    private static function readXML(string $fileName):array|bool
+    public static function readXML(string $fileName):array|bool
     {
         
         if(file_exists("tuneXml/".$fileName)){
@@ -136,7 +136,20 @@ class digXML {
     }    
 
 
-    
+    public static function injectionDb()
+    {
+        $pdo=ConnexionDb::getInstance();
+
+        $listeGrillesXml =self::openFolder('tuneXml');
+
+        $query='INSERT INTO tune (titre,auteur)VALUES(:titre,:auteur)';
+        foreach($listeGrillesXml as $item){
+            $statement = $pdo->prepare($query);
+            $tune=self::getInfoTune($item) ;
+            $statement->execute(array(':titre'=>$tune['titre'],':auteur'=>$tune['auteur']));
+        }
+
+    }
 }
 
 

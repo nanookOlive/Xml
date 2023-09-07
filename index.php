@@ -2,7 +2,18 @@
 
 require('digXML.php');
 
+$_text=[];
+$content=digXML::readXml('Dans la salle du bar-tabac.xml');
 
-$res=digXML::getInfoTune('Little Boxes.xml');
-echo $res['titre'].' de '.$res["auteur"] ;
-ConnexionDB::getInstance();
+
+foreach($content as $item){
+
+    
+        if($item["name"]=='#text' && $item['value'] !=' ' ){
+            array_push($_text,$item['value']);
+        }
+       
+    
+}
+
+var_dump($_text);
