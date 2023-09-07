@@ -51,7 +51,7 @@ class digXML {
 
     // fonction qui va extraire le xml d'un odt et l'ecrire dans un nouveau dossier
 
-    private static function digXML(string $src, string $dest):bool
+    public static function digXML(string $src, string $dest):bool
     {
             
         if(is_dir($dest)){
@@ -69,6 +69,8 @@ class digXML {
                 rename($dest.'/content.xml', $dest.'/'.$newName);
                 chmod('tuneXml/'.$newName,777);
             }
+
+            return true;
          
         }
     }
@@ -108,27 +110,26 @@ class digXML {
     {
     
         $info=[];
-        
+        $_text=[];
         $flag=0;
 
         if($content=self::readXML($fileName)){
 
-            foreach($content as $row){
+            foreach($content as $item){
 
-                if($row['name']=='#text'){
     
-                    $flag ++;
-    
-                    if($flag==2){
-    
-                        $info['auteur']=$row["value"];
-                        break;
-                    }                
+                if($item["name"]=='#text' && $item['value'] !=' ' ){
+                    array_push($_text,$item['value']);
                 }
-            }
+               
+            
+        }
+        
+        
     
             $position = strpos($fileName,'.');
             $info['titre']=substr($fileName, 0, $position);
+            $info['auteur']=$_text[1];
         }
         
         return $info;
