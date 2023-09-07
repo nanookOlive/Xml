@@ -121,7 +121,7 @@ class digXML {
     
                     if($flag==2){
     
-                        $info['auteur']=$row["value"];
+                        $info['auteur']=$row["value"]; // attention l'auteur est parfois plus loin
                         break;
                     }                
                 }
