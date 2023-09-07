@@ -4,6 +4,8 @@
 
 class digXML {
 
+    private const FILETODELETE=['layout-cache','manifest.xml','manifest.rdf','meta.xml','mimetype','settings.xml','styles.xml',
+'accelerator','floater','images','menubar'];
 
 
     private static function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
@@ -49,6 +51,24 @@ class digXML {
 
 }
 
+    private static function cleanXmlFolder():bool
+    {
+
+        // clean the file 
+        foreach(self::FILETODELETE as $file){
+            if(is_file(__DIR__.'/tuneXml/'.$file)){
+
+                unlink(__DIR__.'/tuneXml/'.$file);
+
+
+            }
+
+        }
+
+        //clean the folder 
+        return true;
+
+    }
     // fonction qui va extraire le xml d'un odt et l'ecrire dans un nouveau dossier
 
     public static function digXML(string $src, string $dest):bool
@@ -70,6 +90,7 @@ class digXML {
                 chmod('tuneXml/'.$newName,777);
             }
 
+            self::cleanXmlFolder();
             return true;
          
         }
