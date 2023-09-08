@@ -6,6 +6,7 @@ class digXML {
 
     private const FILETODELETE=['layout-cache','manifest.xml','manifest.rdf','meta.xml','mimetype','settings.xml','styles.xml',
 'accelerator','floater','images','menubar'];
+    private const FOLDERTODELETE=['Thumbnails','Pictures','META-INF','Configurations2'];
 
 
     private static function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
@@ -91,6 +92,10 @@ class digXML {
             }
 
             self::cleanXmlFolder();
+            foreach(self::FOLDERTODELETE as $target){
+
+                self::recurRm('tuneXml/'.$target);
+            }
             return true;
          
         }
@@ -172,6 +177,120 @@ class digXML {
         }
 
     }
+
+    function contentFolder(string $filename) 
+{
+
+    $content = scandir($filename);
+    $orderedContent=[];
+
+    foreach($content as $item){
+
+       
+            if(!is_file($filename.'/'.$item))
+            {
+
+                array_push($orderedContent,$item);
+               
+            }
+        
+            else{
+                echo 'suppresion de '.$filename.'/'.$item;
+                unlink($filename.'/'.$item);
+            }
+
+        
+    }
+
+    unset($orderedContent[0]);
+    unset($orderedContent[1]);
+
+    // foreach($orderedContent as $item){
+
+    //     if(is_file($filename.'/'.$item)){
+
+    //        $pos= array_search($item,$orderedContent);
+    //        removeFile($filename.'/'.$item);
+    //        unset($orderedContent[$pos]);
+    //     }
+    // }
+
+    return $orderedContent;
+
+}
+
+function folderIsEmpty($content):mixed
+{
+
+    if(empty($content)){
+
+        echo 'folder is empty.';
+        return true;
+    }
+    else{
+
+        echo "folder isn't empty.<br>";
+        return false;
+    }
+
+}
+function readArray(array $array){
+
+    foreach($array as $row  ){
+        
+        foreach($row as $key => $value){
+
+            echo $key.' => '.$value.'<br>';
+        }
+    }
+}
+
+function removeFolder($filename){
+
+    if(rmdir($filename)){
+
+       
+        echo('suppression de '.$filename);
+    }
+    else{
+
+        echo 'impossible de rm.';
+    }
+}
+
+function removeFile($filename){
+
+    if(is_file($filename)){
+
+        unset($filename);
+    }
+}
+
+private static function recurRm($filename){
+
+    echo $filename.'<br>';
+
+    var_dump(contentFolder($filename));
+
+   if(folderIsEmpty(contentFolder($filename))){
+        removeFolder($filename);
+   }
+   else{
+
+        foreach(contentFolder($filename) as $item){
+
+            recurRm($filename.'/'.$item);
+
+        }
+    }
+
+   }
+
+   
+
+//digXML::digXML('tuneOdt','tuneXml');
+
+
 }
 
 
@@ -208,6 +327,9 @@ class ConnexionDb extends PDO{
             return self::instance;
         }
     }
+
+    
+
 
 }
 
