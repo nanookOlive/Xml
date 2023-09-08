@@ -4,6 +4,7 @@
 
 class digXML {
 
+    // mes constantes pour le nettoyage de mon dossier tuenXML lors de l'export 
     private const FILETODELETE=['layout-cache','manifest.xml','manifest.rdf','meta.xml','mimetype','settings.xml','styles.xml',
 'accelerator','floater','images','menubar'];
     private const FOLDERTODELETE=['Thumbnails','Pictures','META-INF','Configurations2'];
@@ -16,12 +17,10 @@ class digXML {
 
     if(is_dir($pathname)){
 
-        echo('Le dossier est présent.<br>');
-
             if($nameFiles=scandir($pathname)){
 
-                unset($nameFiles[0]);
-                unset($nameFiles[1]);
+                unset($nameFiles[0]);//afin de supprimer '.'
+                unset($nameFiles[1]);//afin de suprrimer '..'
                 return $nameFiles;
 
             }
@@ -40,6 +39,7 @@ class digXML {
         if(mkdir($pathname,777)){
 
             echo('Dossier créé.');
+            // retourner le tableau
         }
         else{
 
@@ -52,24 +52,21 @@ class digXML {
 
 }
 
-    private static function cleanXmlFolder():bool
+    private static function cleanXmlFolder():bool 
     {
 
-        // clean the file 
+        // clean the folder deleting files from the list FILETODELETE above
         foreach(self::FILETODELETE as $file){
             if(is_file(__DIR__.'/tuneXml/'.$file)){
 
                 unlink(__DIR__.'/tuneXml/'.$file);
-
-
             }
-
         }
-
-        //clean the folder 
         return true;
 
     }
+
+
     // fonction qui va extraire le xml d'un odt et l'ecrire dans un nouveau dossier
 
     public static function digXML(string $src, string $dest):bool
@@ -92,6 +89,8 @@ class digXML {
             }
 
             self::cleanXmlFolder();
+
+            //cleaning the destination folder
             foreach(self::FOLDERTODELETE as $target){
 
                 self::recurRm('tuneXml/'.$target);
@@ -130,7 +129,7 @@ class digXML {
         
     }
 
-    //méthode appelé dans l'index 
+    //mreturn an array title=>, author => 
 
     public static function getInfoTune($fileName) :array
     {
@@ -169,6 +168,7 @@ class digXML {
 
     }    
 
+// insert all the tune in DB
 
     public static function injectionDb()
     {
@@ -184,6 +184,9 @@ class digXML {
         }
 
     }
+
+
+    //return the content of a fodler with no file in it
 
     function contentFolder(string $filename) 
 {
@@ -212,21 +215,12 @@ class digXML {
     unset($orderedContent[0]);
     unset($orderedContent[1]);
 
-    // foreach($orderedContent as $item){
-
-    //     if(is_file($filename.'/'.$item)){
-
-    //        $pos= array_search($item,$orderedContent);
-    //        removeFile($filename.'/'.$item);
-    //        unset($orderedContent[$pos]);
-    //     }
-    // }
-
     return $orderedContent;
 
 }
 
-function folderIsEmpty($content):mixed
+
+function folderIsEmpty($content):bool 
 {
 
     if(empty($content)){
@@ -241,16 +235,8 @@ function folderIsEmpty($content):mixed
     }
 
 }
-function readArray(array $array){
 
-    foreach($array as $row  ){
-        
-        foreach($row as $key => $value){
 
-            echo $key.' => '.$value.'<br>';
-        }
-    }
-}
 
 function removeFolder($filename){
 
@@ -265,13 +251,13 @@ function removeFolder($filename){
     }
 }
 
-function removeFile($filename){
+// function removeFile($filename){
 
-    if(is_file($filename)){
+//     if(is_file($filename)){
 
-        unset($filename);
-    }
-}
+//         unset($filename);
+//     }
+// }
 
 private static function recurRm($filename){
 
@@ -292,10 +278,6 @@ private static function recurRm($filename){
     }
 
    }
-
-   
-
-//digXML::digXML('tuneOdt','tuneXml');
 
 
 }
