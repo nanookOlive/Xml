@@ -90,11 +90,7 @@ class digXML {
 
             self::cleanXmlFolder();
 
-            //cleaning the destination folder
-            foreach(self::FOLDERTODELETE as $target){
-
-                self::recurRm('tuneXml/'.$target);
-            }
+           
             return true;
          
         }
@@ -149,7 +145,7 @@ class digXML {
     
                     if($flag==2){
     
-                        $info['auteur']=$row["value"]; // attention l'auteur est parfois plus loin
+                        $info['auteur']=$item["value"]; // attention l'auteur est parfois plus loin
                         break;
                     }                
                 }
@@ -178,9 +174,13 @@ class digXML {
 
         $query='INSERT INTO tune (titre,auteur)VALUES(:titre,:auteur)';
         foreach($listeGrillesXml as $item){
-            $statement = $pdo->prepare($query);
-            $tune=self::getInfoTune($item) ;
-            $statement->execute(array(':titre'=>$tune['titre'],':auteur'=>$tune['auteur']));
+            if(!is_dir('tuneXml/'.$item)){
+
+                $statement = $pdo->prepare($query);
+                $tune=self::getInfoTune($item) ;
+                $statement->execute(array(':titre'=>$tune['titre'],':auteur'=>$tune['auteur']));
+            }
+            
         }
 
     }

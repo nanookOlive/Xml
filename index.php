@@ -3,12 +3,7 @@
 require('digXML.php');
 
 
-//digXML::digXML('tuneOdt','tuneXml');
+// digXML::digXML('tuneOdt','tuneXml');
 
-echo 'Processing ';
+digXML::injectionDb();
 
-// do some classy IHM 
-
-// i love hugs
-
-// i want some conflicts
