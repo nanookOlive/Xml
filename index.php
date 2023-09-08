@@ -7,7 +7,7 @@ require('digXML.php');
 
 
 
-digXML::digXML('tuneOdt','tuneXml');
+//digXML::digXML('tuneOdt','tuneXml');
 
 
 
