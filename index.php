@@ -8,3 +8,5 @@ require('digXML.php');
 echo 'Processing ';
 
 // do some classy IHM 
+
+// i love hugs
