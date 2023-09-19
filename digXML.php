@@ -172,13 +172,13 @@ class digXML {
 
         $listeGrillesXml =self::openFolder('tuneXml');
 
-        $query='INSERT INTO tune (titre,auteur)VALUES(:titre,:auteur)';
+        $query='INSERT INTO tune (titre,auteur,contributeur)VALUES(:titre,:auteur,:contributeur)';
         foreach($listeGrillesXml as $item){
             if(!is_dir('tuneXml/'.$item)){
 
                 $statement = $pdo->prepare($query);
                 $tune=self::getInfoTune($item) ;
-                $statement->execute(array(':titre'=>$tune['titre'],':auteur'=>$tune['auteur']));
+                $statement->execute(array(':titre'=>ucwords($tune['titre']),':auteur'=>$tune['auteur'],':contributeur'=>'tunePdf/'.ucwords($tune['titre']).'.pdf'));
             }
             
         }

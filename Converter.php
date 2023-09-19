@@ -52,15 +52,33 @@ class Converter{
     }
     //fonction pour nettoyer les noms des fichiers
     //il ne faut pas d'espace et pas de ' en début ou en fin
-    public static function clean($array):bool {
+
+    public static function clean($array,string $src,string $dest):bool {
 
         
         foreach($array as $tune){
 
 
-            $basename=str_replace(" ","_",$tune);
-            $basename=str_replace('\'',"",$basename);
-            rename('tuneOdt/'.$tune,'tuneOdt/'.$basename);
+            $basename=str_replace('\'',"~",$tune);
+            $basename=str_replace(" ","_",$basename);
+            
+            rename($src.'/'.$tune,$dest.'/'.$basename);
+
+        }
+        return true;
+        
+    }
+
+    public static function readable($array,string $src,string $dest):bool {
+
+        
+        foreach($array as $tune){
+
+
+            $basename=str_replace('~','\'',$tune);
+            $basename=str_replace("_", " ",$basename);
+            
+            rename($src.'/'.$tune,$dest.'/'.$basename);
 
         }
         return true;
