@@ -5,6 +5,7 @@ namespace Converter;
 
 class Converter{
 
+    protected static  $_LOG='log.txt';
 
     public static function convert(string $srcFile, string $destFolder){
 
@@ -36,7 +37,7 @@ class Converter{
                 }
                 else{
 
-                 die('Wrong type of file src => '.$ext.'. Odt format only supported.');
+                    self::log('Wrong type for > '.$infoFile->getFilename());
                 }
 
             }
@@ -49,12 +50,13 @@ class Converter{
         }
 
     }
-    
-    public static function clean($array):array|bool {
+    //fonction pour nettoyer les noms des fichiers
+    //il ne faut pas d'espace et pas de ' en début ou en fin
+    public static function clean($array):bool {
 
-        $res=[];
-
+        
         foreach($array as $tune){
+
 
             $basename=str_replace(" ","_",$tune);
             $basename=str_replace('\'',"",$basename);
@@ -63,5 +65,13 @@ class Converter{
         }
         return true;
         
+    }
+
+    public static function log(string $errorMessage){
+
+        $handle=fopen(self::$_LOG,'a');
+        fwrite($handle,$errorMessage.PHP_EOL);
+        fclose($handle);
+
     }
 }
