@@ -39,5 +39,7 @@ $converter = new Converter;
 // $listeGrille=$dig::openFolder('tuneOdt');
 
 // $converter::readable($listeGrille,'tuneOdt','tuneOdt');
+
+$converter::upp($dig::openFolder('tunePdf'));
 ?>
 

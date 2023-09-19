@@ -53,6 +53,15 @@ class Converter{
     //fonction pour nettoyer les noms des fichiers
     //il ne faut pas d'espace et pas de ' en début ou en fin
 
+    public static function upp($array){
+
+        foreach($array as $grille){
+
+            $name=ucwords($grille);
+            rename('tunePdf/'.$grille,'tunePdf/'.$name);
+        }
+
+    }
     public static function clean($array,string $src,string $dest):bool {
 
         
