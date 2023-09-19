@@ -10,7 +10,7 @@ class digXML {
     private const FOLDERTODELETE=['Thumbnails','Pictures','META-INF','Configurations2'];
 
 
-    private static function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
+    public static function openFolder(string $pathname):array // renvoie un tableau qui contient l'ensemble des noms de fichiers dans mon dossier src
     {
 
     $nameFiles=[];
