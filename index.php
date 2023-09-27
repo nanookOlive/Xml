@@ -40,6 +40,8 @@ $converter = new Converter;
 
 // $converter::readable($listeGrille,'tuneOdt','tuneOdt');
 
-$converter::upp($dig::openFolder('tunePdf'));
+//$converter::upp($dig::openFolder('tunePdf'));
+
+$dig::injectionDb();
 ?>
 

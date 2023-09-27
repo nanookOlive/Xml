@@ -172,13 +172,71 @@ class digXML {
 
         $listeGrillesXml =self::openFolder('tuneXml');
 
-        $query='INSERT INTO tune (titre,auteur,contributeur)VALUES(:titre,:auteur,:contributeur)';
+        $query='INSERT INTO tune (titre,auteurId,chemin)VALUES(:titre,(SELECT id FROM auteur WHERE nomAuteur= :auteur),:chemin)';
+
         foreach($listeGrillesXml as $item){
             if(!is_dir('tuneXml/'.$item)){
 
                 $statement = $pdo->prepare($query);
                 $tune=self::getInfoTune($item) ;
-                $statement->execute(array(':titre'=>ucwords($tune['titre']),':auteur'=>$tune['auteur'],':contributeur'=>'tunePdf/'.ucwords($tune['titre']).'.pdf'));
+                $statement->execute(array(':titre'=>ucwords($tune['titre']),':auteur'=>$tune['auteur'],':chemin'=>'tunePdf/'.ucwords($tune['titre']).'.pdf'));
+                 
+            }
+            
+        }
+
+    }
+
+    public static function injectionAuteurDb()
+    {
+        $pdo=ConnexionDb::getInstance();
+
+        $listeGrillesXml =self::openFolder('tuneXml');
+
+        $query='INSERT INTO auteur(nomAuteur)VALUES(:nomAuteur)';
+
+        foreach($listeGrillesXml as $item){
+
+            if(!is_dir('tuneXml/'.$item)){
+
+                $tune=self::getInfoTune($item);
+                $data=[':nomAuteur'=>$tune['auteur']];
+
+               
+                if(($res=$pdo->prepare("SELECT id FROM auteur WHERE nomAuteur=:nomAuteur"))){
+                    echo 'prepare ';
+                    if($res->execute($data)){
+                        echo 'execute';
+                        if(!($blou=$res->fetch(PDO::FETCH_ASSOC))){
+                            echo 'insert';
+                            $statement = $pdo->prepare($query);
+                            $statement->execute(array(':nomAuteur'=>ucwords($data[':nomAuteur'])));
+                        }
+
+                        else{
+                            
+                        }
+                    }
+
+                    else{
+
+                        echo 'impossible execute';
+                    }
+                    
+                }
+
+                else{
+
+                    echo 'impossible de prepare';
+                }
+                
+                 
+            }
+
+
+            else{
+
+                echo ($item.'is folder');
             }
             
         }
@@ -278,6 +336,19 @@ private static function recurRm($filename){
     }
 
    }
+
+   public static function getAll():array
+    {
+
+        $pdo=new ConnexionDb();
+        $data=[];
+        $stat=$pdo->query('select distinct auteur from tune order by auteur');
+        while($res=$stat->fetch(PDO::FETCH_ASSOC)){
+
+            array_push($data,$res['auteur']);
+        }
+        return $data;
+    }
 
 
 }
