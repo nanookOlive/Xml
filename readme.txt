@@ -4,11 +4,8 @@ La finalité est d'avoir l'ensemble de ces grilles disponibles sur l'application
 
 Les grilles qui sont au format ODT sont trop nombreuses pour être insérée dans la base de données de l'application à la main.
 Je vais donc automatiser l'extraction des donées nécessaires, à savoir l'auteur et le titre.
-La première étape consiste à inspecter le dossier dans lequel sont staockés les grilles puis d'extraire le xml et de les stocker dans un nouveau dossier
+La première étape consiste à inspecter le dossier dans lequel sont stockées les grilles puis d'extraire le xml et de les stocker dans un nouveau dossier
 Ensuite j'extrait le titre et l'auteur. 
-Puis j'insèer dans la base de données
-Faire gestion d'erreur et insere dans log
-
-retélécharger le dossier tuneOdt
+Puis insertion en base  avec pdo
 
 
