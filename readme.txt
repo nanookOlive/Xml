@@ -1,11 +1,5 @@
-cette application a pour but d'extraire le xml d'un format odt. Il s'agit de grilles de chanson écrite pour les élèves.
-La finalité est d'avoir l'ensemble de ces grilles disponibles sur l'application inukshuk
+# XML (php vanilla - projet perso)
 
-
-Les grilles qui sont au format ODT sont trop nombreuses pour être insérée dans la base de données de l'application à la main.
-Je vais donc automatiser l'extraction des donées nécessaires, à savoir l'auteur et le titre.
-La première étape consiste à inspecter le dossier dans lequel sont stockées les grilles puis d'extraire le xml et de les stocker dans un nouveau dossier
-Ensuite j'extrait le titre et l'auteur. 
-Puis insertion en base  avec pdo
-
-
+Xml est un outil que j’ai réalisé afin d’automatiser la conversion d’un grand nombre de fichiers .odt en .pdf, leur enregistrement en base de données.
+J'ai pu expérimenter entre autres la manipulation de fichiers XML, la lecture et l'écriture dans un dossier, l'appel et l'exécution de commandes bash depuis un script PHP.
+Xml m'a permis de peupler facilement la base de donnée de l'application [Inukshuk](https://nanookpandora.com/inukshuk)
